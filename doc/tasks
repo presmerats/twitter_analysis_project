@@ -97,10 +97,10 @@ Twitter project
 		ok- create repo and upload to github
 		
 		- unit testing setup: 
-			- branch,
-			- dir, imports, test
-			- merge to test, test, merge to master if all ok
-				- write down to README.md
+			ok- branch,
+			ok- dir, imports, test
+			ok- merge to test, test, merge to master if all ok
+			ok- write down to README.md
 			- automate?
 
 
