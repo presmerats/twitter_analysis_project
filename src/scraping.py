@@ -170,13 +170,34 @@ def search_for_hashtags(hashtag_phrase):
 
 
 
-def write_row(f, row_list):
-    w = csv.writer(f)
-    w.writerow(row_list)
+def write_row(results_filename, modifier, row_list):
+    with open(result_filename, modifier) as f:
+        w = csv.writer(f)
+        w.writerow(row_list)
 
 
+def init_results_file(result_filename, modifier, filepath, header_row = [
+            'timestamp',
+            #'tweet_id', 
+            #'tweet_text', 
+            'username',
+            #'hashtags',
+            'num_followers',
+            'lang',
+            'favorite',
+            #'is_quote_status',
+            'retweet',
+            'to',
+            ]):
 
+    with open(result_filename, modifier) as file:
+        if filepath is None:
+            #write header row to spreadsheet
+            write_row(header_row)
 
+        return file
+
+    return None
 
 def search_for_replies_from_user(user_name, limit=1000, filepath=None):
 
@@ -209,54 +230,39 @@ def search_for_replies(user_name, limit=1000, filepath=None, query=None):
 
     found_repliers_list=[]
 
-    with open(result_filename, modifier) as file:
-
-        
-
-        if filepath is None:
-            #write header row to spreadsheet
-            write_row([
-            'timestamp',
-            #'tweet_id', 
-            #'tweet_text', 
-            'username',
-            #'hashtags',
-            'num_followers',
-            'lang',
-            'favorite',
-            #'is_quote_status',
-            'retweet',
-            'to',
-            ])
-
-        for tweet in limit_handled(
-                tweepy.Cursor(
-                    api.search, 
-                    q=query, 
-                    tweet_mode='extended'
-                    ).items(limit)):
-
-                user_screen_name= tweet.user.screen_name#.encode('utf-8')
-
-                #print(dir(tweet))
-                write_row([
-                    tweet.created_at,
-                    #tweet.id, 
-                    #tweet.full_text.replace('\n',' ').encode('utf-8'), 
-                    user_screen_name, 
-                    #[e['text'] for e in tweet._json['entities']['hashtags']], 
-                    tweet.user.followers_count,
-                    tweet.lang,
-                    tweet.favorited,
-                    tweet.retweeted,
-                    user_name,
-                    ])
-
-                found_repliers_list.append(user_screen_name)
+    init_results_file(result_filename, modifier, filepath)
 
 
-        return result_filename, found_repliers_list
-    return None, found_repliers_list
+    for tweet in limit_handled(
+            tweepy.Cursor(
+                api.search, 
+                q=query, 
+                tweet_mode='extended'
+                ).items(limit)):
+
+
+            user_screen_name= tweet.user.screen_name#.encode('utf-8')
+
+            #print(dir(tweet))
+            write_row(result_filename, modifier,
+                [
+                tweet.created_at,
+                #tweet.id, 
+                #tweet.full_text.replace('\n',' ').encode('utf-8'), 
+                user_screen_name, 
+                #[e['text'] for e in tweet._json['entities']['hashtags']], 
+                tweet.user.followers_count,
+                tweet.lang,
+                tweet.favorited,
+                tweet.retweeted,
+                user_name,
+                ])
+
+            found_repliers_list.append(user_screen_name)
+
+
+    return result_filename, found_repliers_list
+    #return None, found_repliers_list
 
 
 
