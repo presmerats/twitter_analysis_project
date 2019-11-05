@@ -169,6 +169,15 @@ def search_for_hashtags(hashtag_phrase):
                 ])
 
 
+
+def write_row(f, row_list):
+    w = csv.writer(f)
+    w.writerow(row_list)
+
+
+
+
+
 def search_for_replies_from_user(user_name, limit=1000, filepath=None):
 
     return search_for_replies(user_name, limit=limit, filepath=filepath, query='from:{}'.format(user_name))
@@ -202,11 +211,11 @@ def search_for_replies(user_name, limit=1000, filepath=None, query=None):
 
     with open(result_filename, modifier) as file:
 
-        w = csv.writer(file)
+        
 
         if filepath is None:
             #write header row to spreadsheet
-            w.writerow([
+            write_row([
             'timestamp',
             #'tweet_id', 
             #'tweet_text', 
@@ -230,7 +239,7 @@ def search_for_replies(user_name, limit=1000, filepath=None, query=None):
                 user_screen_name= tweet.user.screen_name#.encode('utf-8')
 
                 #print(dir(tweet))
-                w.writerow([
+                write_row([
                     tweet.created_at,
                     #tweet.id, 
                     #tweet.full_text.replace('\n',' ').encode('utf-8'), 

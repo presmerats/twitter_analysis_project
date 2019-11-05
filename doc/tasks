@@ -96,13 +96,12 @@ Twitter project
 		
 		ok- create repo and upload to github
 		
-		- unit testing setup: 
+		ok- unit testing setup: 
 			ok- branch,
 			ok- dir, imports, test
 			ok- merge to test, test, merge to master if all ok
 			ok- write down to README.md
 			- automate?
-
 
 		- unit tests for depth and breadth and anything else (quick and easy!)
 			- correctly pass from new to pending to treated
@@ -114,6 +113,7 @@ Twitter project
 
 		
 		- data to graph transformation
+		
 		- unit tests for graph data
 			- all users are present (nodes)
 			- all interactions present (edges)
