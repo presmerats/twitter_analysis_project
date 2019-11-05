@@ -1,0 +1,213 @@
+
+Twitter project
+---------------
+
+- Dataset
+	- select several politician accounts (2-5 from each party)
+		- download all their tweets from 1 week (campaign week)
+	- for each politician select 1-2 tweet messages
+		- download all the interactions: comments, likes, retweets
+		- for each interaction account: 
+			- download 100-200 tweets 
+			- get all their followers, following, and users that interacted in their 100-200 tweets
+		- build a graph from each politician
+			- account is the node
+			- edge is interaction: follow, like, retweet, comment
+
+- task 1 - classification
+	- each party is a class
+	- build a text classifier, from easy to more complex
+		- BoW + Naive bayes
+		- Bow + LogisticRegr
+		- Bow + TFID
+		- Fasttext 
+		- ?
+	- given a new tweet or tweets from a new account, classify them
+	- test with other politicians from the same party!
+
+- task 2 - Social network analysis
+	- basic personalized page rank analysis -> important nodes
+		- remove original politician from network then find that?
+		- build a mega network and find that?
+	- detect bot networks...
+		- how?
+
+- task 3 - Information extraction
+	- NER extraction
+	- NER relationships in a graph
+	- sentiment analysis & NER
+
+- task 4 - Summarization
+	- basic summarization by freq
+	- basic summarization by NER & freq¿
+
+
+----------------------------------------------------------------------
+
+- Dataset
+	ok- get tweets from an account (past tweets)
+	ok- how many tweets how we get? how to not surpass limits? and how long does it take?
+		- test: 3248 in first test
+		- limit per 15 min window
+		- 15 min window, so wait 15 min 
+
+	ok- extract info of a single tweet
+		ok- tweet id
+		ok- user id
+		ko- take a tweet and extract: too complicated
+
+	ok- user replies
+		ko- not in free account type
+		ok- simplify into reply's to the account, not the tweet
+		ok- types
+			- favorited = like
+			- retweeted = retweet
+			- nothing = comment
+
+
+		
+	ok- users of those replies
+		ok- design output 
+			ok- how to slowly build the graph
+				test1:
+					- select 4-5 politicians
+						- Santi_ABASCAL
+						- vox_es
+						- ivanedlm
+						- monasterioR
+						- hermanntertsch
+						- Ortega_Smith
+					- for each:
+						- get their replies in a separate csv
+						- limit to 100
+						- extract list of users ids' from csv
+						- for each id
+							- get the replies to this id
+							- limit to 100
+							- save in the same csv file
+			ok- table of users:
+				user_id, screen_name,  type (= follow, reply,favorited, retweeted),  to(: user_id , screen_nae)
+			ok- save data to data/graphs
+			ok- data/bow
+
+
+	- REFACTOR
+		ok- graph_retrieval: control depth and breadth
+		
+		ok- create repo and upload to github
+		
+		- unit testing setup: 
+			- branch,
+			- dir, imports, test
+			- merge to test, test, merge to master if all ok
+				- write down to README.md
+			- automate?
+
+
+		- unit tests for depth and breadth and anything else (quick and easy!)
+			- correctly pass from new to pending to treated
+			- removing repeated entries correctly
+			- depth is correctly used
+			- breadth is correctly controlled
+			- rate_limiting is correctly controlled
+			- data extracted tests: from or to are correct, total count?..mock input data to be sure
+
+		
+		- data to graph transformation
+		- unit tests for graph data
+			- all users are present (nodes)
+			- all interactions present (edges)
+			-
+
+	- gather data
+		- graph data: first version with a 100 depth at 2 levels
+
+	- visualization:
+		nice notebook for reporting dataset insights and examples
+		- interactions graphs
+			- edge colored based on type of interaction
+		
+
+	- EDA notebook
+		- distributions by feature
+			- num followers
+			- num following
+			- spain flag
+			- green heart
+			- 
+			- num to ? vacuous since limited to 100 but templateing
+			- num from ? vacuous since limited to 100 but templating
+
+	- other ideas to test & implement
+		- friendship
+			- api.friends_ids(user_id)
+		- follower
+			- api.followers_ids(user_id)
+		- replies they get (more links)
+		- replies they do (more links)
+		- save in a separate folder for each original account
+		- how many levels? 1,2,3¿
+		- how many replies of each user? 1000,2000,5000?
+		- limit by date: last week , last month
+		- implement
+		- rerun
+		- rerun visualization & EDA notebooks
+
+
+---------------------------
+	- Bow dataset retrieval: control how many, hand generate list of political targets
+		- unit tests
+			- control how many correctly
+			- data extracted tests: correct author, no RT, no favorites, mock(or fix) input data to be sure
+		- Bow dataset: for each party 10-20 accounts, 2000 tweet texts? (non RT, no fav)
+
+	- visualization:
+		nice notebook for reporting dataset insights and examples
+		- tweets for classifications
+			- some accounts gathered tweets
+			- pandas table showing content
+			- class already added
+			- build a nice training and testing set (show sizes of each split)
+
+	- BOw Dataset visualization
+		- BoW TF-IDF feature generate
+		- word2vec in spanish feature generate
+		- PCA 2D visualization of embeddings
+		- test a temporal visualization of the embedding in 2d
+
+
+	- report explaining dataset generation
+		- github.io?
+		- upload to kaggle? UCL?
+
+
+	- REFACTOR
+		- account_document_retrieval: rethink and simplify
+
+
+----------------------
+- Experiment 1
+	- num followers by 
+		- name features
+			- VOX
+			- spain flag
+			- green heart
+			- orange
+			- yellow knot
+			- catalan flag
+			- euskal herria flag
+			- ...
+		- replier to 
+			- VOX politician
+			- C's politician
+			- PSOE politician
+			- ...
+		- coordinates!
+	- extreure 1 million repliers to Santi with flag or VOX or green heart: 
+		- cross-ref their followers -> COUNT DISTINCT(TOTAL)
+		- are there more followers than voters in spain?
+		- are there more unique followers than people living in Spain?
+
+	- compare proportions of users with < 1k followers with users with > 1k followers
+
+
